@@ -106,8 +106,12 @@ palm.add(fingers);
 const fingerGeometry = new THREE.BoxGeometry(0.2, 1, 0.2);
 const fingerMaterial = new THREE.MeshStandardMaterial({ color: 0xffaa55 });
 for (let i = 0; i < 5; i++) {
-    const finger = new THREE.Mesh(fingerGeometry, fingerMaterial);
-    finger.position.x = (i - 2) * 0.3;
+    const fingerJoint = new THREE.Group();
+    fingerJoint.position.x = -0,7 + i * 0.4
+    fingerJoint.position.y = 0.75;
+    palm.add(fingerJoint);
+
+            const finger = new THREE.Mesh(fingerGeometry, fingerMaterial);
     finger.position.y = 0.5;
     fingers.add(finger);
 }
