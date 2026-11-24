@@ -1,4 +1,3 @@
-
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
@@ -19,7 +18,7 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-
+// Ground
 const ground = new THREE.Mesh(
     new THREE.PlaneGeometry(20, 20),
     new THREE.MeshStandardMaterial({ color: 0xcccccc })
@@ -30,18 +29,18 @@ ground.rotation.x = -Math.PI / 2;
 const grid = new THREE.GridHelper(20, 20);
 scene.add(ground, grid);
 
-
+// Lights
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 const dirLight = new THREE.DirectionalLight(0xffffff, 1);
 scene.add(ambientLight, dirLight);
 
-
+// Base
 const baseGeometry = new THREE.CylinderGeometry(1.2, 1.2, 0.5, 32);
 const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x555555 });
 const base = new THREE.Mesh(baseGeometry, baseMaterial);
 scene.add(base);
 
-
+// Shoulder
 const shoulders = new THREE.Group();
 shoulders.position.y = 0.5;
 base.add(shoulders);
@@ -52,7 +51,7 @@ const shoulderJoint = new THREE.Mesh(
 );
 shoulders.add(shoulderJoint);
 
-
+// Upper arm
 const armMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
 
 const upperArm = new THREE.Mesh(
@@ -62,7 +61,7 @@ const upperArm = new THREE.Mesh(
 upperArm.position.y = 1.5;
 shoulders.add(upperArm);
 
-
+// Elbow
 const elbow = new THREE.Group();
 elbow.position.y = 3;
 shoulders.add(elbow);
@@ -73,7 +72,7 @@ const elbowJoint = new THREE.Mesh(
 );
 elbow.add(elbowJoint);
 
-
+// Forearm
 const forearm = new THREE.Mesh(
     new THREE.BoxGeometry(0.6, 3, 0.7),
     armMaterial
@@ -81,7 +80,7 @@ const forearm = new THREE.Mesh(
 forearm.position.y = 1.5;
 elbow.add(forearm);
 
-
+// Wrist
 const wrist = new THREE.Group();
 wrist.position.y = 3;
 elbow.add(wrist);
@@ -92,7 +91,7 @@ const wristJoint = new THREE.Mesh(
 );
 wrist.add(wristJoint);
 
-
+// Palm
 const palm = new THREE.Mesh(
     new THREE.BoxGeometry(1.0, 1.5, 0.4),
     new THREE.MeshStandardMaterial({ color: 0xffaa55 })
@@ -105,25 +104,20 @@ fingers.position.y = 0.5;
 palm.add(fingers);
 const fingerGeometry = new THREE.BoxGeometry(0.2, 1, 0.2);
 const fingerMaterial = new THREE.MeshStandardMaterial({ color: 0xffaa55 });
-for (let i = 0; i < 5; i++) {
-    const fingerJoint = new THREE.Group();
-    fingerJoint.position.x = -0,7 + i * 0.4
-    fingerJoint.position.y = 0.75;
-    palm.add(fingerJoint);
-
-            const finger = new THREE.Mesh(fingerGeometry, fingerMaterial);
+for (let i = -2; i <= 2; i++) {
+    const finger = new THREE.Mesh(fingerGeometry, fingerMaterial);
+    finger.position.x = i * 0.3;
     finger.position.y = 0.5;
     fingers.add(finger);
 }
-
-
+// Initial rotations
 shoulders.rotation.z = THREE.MathUtils.degToRad(-20);
 elbow.rotation.z = THREE.MathUtils.degToRad(40);
 wrist.rotation.z = THREE.MathUtils.degToRad(-20);
 
 const rotationStep = THREE.MathUtils.degToRad(5);
 
-
+// Keyboard controls
 window.addEventListener('keydown', function (event) {
     const key = event.key.toLowerCase();
 
@@ -142,19 +136,19 @@ window.addEventListener('keydown', function (event) {
     }
 });
 
-
+// Orbit controls
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(0, 3, 0);
 controls.update();
 
-
+// Resize
 window.addEventListener('resize', function () {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-
+// Animation
 function animate() {
     requestAnimationFrame(animate);
     controls.update();
